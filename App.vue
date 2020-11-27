@@ -1,17 +1,53 @@
 <template>
-  <view class="container">
-    <text class="text-color-primary">My Vue Native App</text>
-  </view>
+  <app-navigator></app-navigator>
 </template>
 
-<style>
-.container {
-  background-color: white;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
+<script>
+import { createAppContainer, createStackNavigator } from "vue-native-router";
+import HomeScreen from "./screens/HomeScreen.vue";
+import DetailsScreen from "./screens/DetailsScreen.vue";
+
+const StackNavigator = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+      title: 'Stores',
+      headerStyle: {
+        backgroundColor: '#1f4068',
+        height:45
+      },
+      headerTintColor:"white",
+      headerTitleStyle: {
+        fontWeight: "bold",
+        fontSize:15
+      }
+      },
+    },
+    Details:{
+      screen : DetailsScreen,
+      navigationOptions: {
+        title: 'Store Detail',
+        headerStyle:{
+          backgroundColor: '#1f4068',
+          height:45
+        },
+        headerTintColor:"white",
+        headerTitleStyle: {
+          fontWeight: "bold",
+          fontSize: 15
+        }
+      }
+    }
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+const AppNavigator = createAppContainer(StackNavigator);
+
+export default {
+  components: { AppNavigator }
 }
-.text-color-primary {
-  color: blue;
-}
-</style>
+</script>
