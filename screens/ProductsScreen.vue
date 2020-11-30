@@ -132,9 +132,7 @@ export default {
       this.actionSelected.delete = !this.actionSelected.delete;
     },
     deleteSelected(){
-      store.dispatch("DELETE_PRODUCTS", this.itemSelected.id)
-return ;
-      axios.delete(`${env.API_CALL}/productos/${this.id}`).then(res=>{
+      axios.delete(`${env.API_CALL}/productos/${this.itemSelected.id}`).then(res=>{
         if(res.status === 200){
           store.dispatch("DELETE_PRODUCTS", this.itemSelected.id)
         }
