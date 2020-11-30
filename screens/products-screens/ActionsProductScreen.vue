@@ -3,13 +3,13 @@
       <status-bar background-color="blue" bar-style="light-content"/>
     <view class="form">
       <view class="item-input">
-        <text class="text-style">Store Name:</text>
+        <text class="text-style">Product Name:</text>
         <text-input class="input-style" v-model="name"/>
       </view>
 
       <view class="item-input">
-        <text class="text-style">Store Direction:</text>
-        <text-input class="input-style" v-model="direction"/>
+        <text class="text-style">Product Price:</text>
+        <text-input keyboardType="numeric" class="input-style" v-model="price"/>
       </view>
     </view>
     <view class="center">
@@ -84,31 +84,31 @@ export default {
     return {
       mode:'add', //add or edit
       name:'',
-      direction: '',
-      id: ''
+      price: '',
+      id: '',
     };
   },
   methods: {
     saveStore() {
       const body = {
         nombre : this.name,
-        direccion : this.direction
+        precio : this.price
       }
       if(this.mode !== "edit"){
-        axios.post(`${env.API_CALL}/tiendas`,body).then((res)=>{
+        axios.post(`${env.API_CALL}/productos`, {...body, tienda : store.state.ProductsList.id}).then((res)=>{
           if(res.status === 201){
-            store.dispatch("ADD_STORE", res.data)
-            this.navigation.navigate("Home");
+            store.dispatch("ADD_PRODUCTS", {...body, id: res.data.id})
+            this.navigation.navigate("Details");
           }
         })
       }
       else{
-       axios.patch(`${env.API_CALL}/tiendas/${this.id}`,body).then(res => {
-         if(res.status === 200){
-           store.dispatch("EDIT_STORE", {name: this.name, direction : this.direction, id : this.id} )
-           this.navigation.navigate("Home")
-         }
-        })
+        axios.patch(`${env.API_CALL}/productos/${this.id}`, {...body, tienda: store.state.ProductsList.id}).then(res => {
+          if(res.status === 200){
+            store.dispatch("EDIT_PRODUCTS", {name: this.name, price : this.price, id : this.id} )
+            this.navigation.navigate("Details")
+          }
+         })
       }
     },
   },
@@ -116,7 +116,7 @@ export default {
     const details = this.navigation.getParam("datos");
     if (details){
       this.name = details.nombre;
-      this.direction = details.direccion;
+      this.price = details.precio.toString();
       this.mode = "edit";
       this.id = details.id;
     }
